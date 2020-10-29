@@ -78,8 +78,8 @@ print('전처리 후 테스트용 샘플의 개수 :',len(test_data))
 stopwords = ['의','가','이','은','들','는','좀','잘','걍','과','도','를','으로','자','에','와','한','하다']
 
 # 데이터 양이 너무 많아서 우선 300개정도 크기 조정
-train_data = train_data[:10]
-test_data = test_data[:10]
+train_data = train_data[:100]
+test_data = test_data[:100]
 
 okt = Okt()
 X_train = []
@@ -105,4 +105,27 @@ for sentence in test_data['document']:
 tokenizer = Tokenizer()
 tokenizer.fit_on_texts(X_train)
 
-print(tokenizer.word_index)
+# print(tokenizer.word_index)
+
+threshold = 2
+total_cnt = len(tokenizer.word_index) # 단어의 수
+rare_cnt = 0 # 등장 빈도수가 threshold보다 작은 단어의 개수를 카운트
+total_freq = 0 # 훈련 데이터의 전체 단어 빈도수 총 합
+rare_freq = 0 # 등장 빈도수가 threshold보다 작은 단어의 등장 빈도수 총 합
+
+# 단어와 빈도수의 쌍(pair)을 key와 value로 받는다.
+for key, value in tokenizer.word_counts.items():
+    total_freq = total_freq + value
+    
+    # 단어의 등장 빈도수가 threshold보다 작으면
+    if (value < threshold) : 
+        rare_cnt = rare_cnt + 1
+        rare_freq = rare_freq + value
+        rare_freq = rare_freq + value
+        
+print('단어 집합(Vocabulary)의 크기 :', total_cnt)
+print('등장 빈도가 %s 번 이하인 희귀 단어의 수: %s' %(threshold - 1, rare_cnt))
+print('단어 집합에서 희귀 단어의 비율:', (rare_cnt / total_cnt) * 100)
+print('전체 등장 빈도에서 희귀 단어 등장 빈도 비율', (rare_freq / total_freq) * 100)
+
+
