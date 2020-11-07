@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import re
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+import time
+import datetime
 
 train_data = pd.read_table('ratings_train.txt') # 데이터 읽어오기
 test_data = pd.read_table('ratings_test.txt')
@@ -78,35 +80,60 @@ print('전처리 후 테스트용 샘플의 개수 :',len(test_data))
 stopwords = ['의','가','이','은','들','는','좀','잘','걍','과','도','를','으로','자','에','와','한','하다']
 
 # 데이터 양이 너무 많아서 우선 300개정도 크기 조정
-train_data = train_data[:1000]
-test_data = test_data[:1000]
+train_data = train_data[:40000]
+test_data = test_data[:10000]
 
 okt = Okt()
-X_train = []
-for sentence in train_data['document']:
-    temp_X = []
-    temp_X = okt.morphs(sentence, stem = True) # 토큰화
-    temp_X = [word for word in temp_X if not word in stopwords] # 불용어 제거
-    X_train.append(temp_X)
+# X_train = []
+# X_count = 1
+# start = time.time() # 코드 실행 시간 측정을 위해 시작 시간 저장
+# for sentence in train_data['document']:
+#     temp_X = []
+#     temp_X = okt.morphs(sentence, stem = True) # 토큰화
+#     temp_X = [word for word in temp_X if not word in stopwords] # 불용어 제거
+#     print(f"{X_count} 번째 토큰화 완료 . . .")
+#     X_count += 1
+#     X_train.append(temp_X)
 
-print()
-print('불용어 처리 한 샘플 확인')
+# sec = time.time() - start # 총 실행 시간, 단 초 단위로만 나옴
+# times = str(datetime.timedelta(seconds=sec)).split(".")
+# times = times[0]
+# print(f"트레인 데이터 {len(X_train)}건 토큰화 수행 시간: {times}") 
+  
+
+# with open('ratings_train.json', 'w', encoding="utf-8") as make_file:
+#     json.dump(X_train, make_file, ensure_ascii=False, indent="\t")
+
+# print()
+# print('불용어 처리 한 샘플 확인')
 # print(X_train[:3])
 
+X_count = 1
 X_test = []
+start = time.time()
 for sentence in test_data['document']:
     temp_X = []
     temp_X = okt.morphs(sentence, stem = True)
     temp_X = [word for word in temp_X if not word in stopwords]
+    print(f"{X_count} 번째 토큰화 완료 . . .")
+    X_count += 1
     X_test.append(temp_X)
-    
-# print(X_test[:3])
 
-tokenizer = Tokenizer()
-tokenizer.fit_on_texts(X_train)
+with open('ratings_test.json', 'w', encoding="utf-8") as make_file:
+    json.dump(X_test, make_file, ensure_ascii=False, indent="\t")
+
+sec = time.time() - start # 총 실행 시간, 단 초 단위로만 나옴
+times = str(datetime.timedelta(seconds=sec)).split(".")
+times = times[0]
+print(f"테스트 데이터 {len(X_test)}건 토큰화 수행 시간: {times}")  
+               
+# print(X_test[:3])
+# tokenizer = Tokenizer()
+# tokenizer.fit_on_texts(X_train)
 
 # print(tokenizer.word_index)
 
+'''
 threshold = 2
 total_cnt = len(tokenizer.word_index) # 단어의 수
 rare_cnt = 0 # 등장 빈도수가 threshold보다 작은 단어의 개수를 카운트
@@ -175,3 +202,4 @@ below_threshold_len(max_len, X_train)
 
 X_train = pad_sequences(X_train, maxlen = max_len)
 X_test = pad_sequences(X_test, maxlen = max_len)
+'''
