@@ -80,29 +80,30 @@ print('전처리 후 테스트용 샘플의 개수 :',len(test_data))
 stopwords = ['의','가','이','은','들','는','좀','잘','걍','과','도','를','으로','자','에','와','한','하다']
 
 # 데이터 양이 너무 많아서 우선 300개정도 크기 조정
-train_data = train_data[:40000]
-test_data = test_data[:10000]
+# train_data = train_data[:40000]
+# test_data = test_data[:10000]
 
 okt = Okt()
-# X_train = []
-# X_count = 1
-# start = time.time() # 코드 실행 시간 측정을 위해 시작 시간 저장
-# for sentence in train_data['document']:
-#     temp_X = []
-#     temp_X = okt.morphs(sentence, stem = True) # 토큰화
-#     temp_X = [word for word in temp_X if not word in stopwords] # 불용어 제거
-#     print(f"{X_count} 번째 토큰화 완료 . . .")
-#     X_count += 1
-#     X_train.append(temp_X)
+X_train = []
+X_count = 1
+start = time.time() # 코드 실행 시간 측정을 위해 시작 시간 저장
+for sentence in train_data['document']:
+    temp_X = []
+    temp_X = okt.morphs(sentence, stem = True) # 토큰화
+    temp_X = [word for word in temp_X if not word in stopwords] # 불용어 제거
+    if X_count % 1000 == 0:
+        print(f"{X_count} 번째 토큰화 완료 . . .")
+    X_count += 1
+    X_train.append(temp_X)
 
-# sec = time.time() - start # 총 실행 시간, 단 초 단위로만 나옴
-# times = str(datetime.timedelta(seconds=sec)).split(".")
-# times = times[0]
-# print(f"트레인 데이터 {len(X_train)}건 토큰화 수행 시간: {times}") 
+sec = time.time() - start # 총 실행 시간, 단 초 단위로만 나옴
+times = str(datetime.timedelta(seconds=sec)).split(".")
+times = times[0]
+print(f"트레인 데이터 {len(X_train)}건 토큰화 수행 시간: {times}") 
   
 
-# with open('ratings_train.json', 'w', encoding="utf-8") as make_file:
-#     json.dump(X_train, make_file, ensure_ascii=False, indent="\t")
+with open('ratings_train.json', 'w', encoding="utf-8") as make_file:
+    json.dump(X_train, make_file, ensure_ascii=False, indent="\t")
 
 # print()
 # print('불용어 처리 한 샘플 확인')
@@ -115,7 +116,8 @@ for sentence in test_data['document']:
     temp_X = []
     temp_X = okt.morphs(sentence, stem = True)
     temp_X = [word for word in temp_X if not word in stopwords]
-    print(f"{X_count} 번째 토큰화 완료 . . .")
+    if X_count % 1000 == 0:
+        print(f"{X_count} 번째 토큰화 완료 . . .")
     X_count += 1
     X_test.append(temp_X)
 
