@@ -1,16 +1,6 @@
-import collections
-import matplotlib.pyplot as plt
+print('파이썬 맛간거 아닌지 확인좀..')
 
-num_friends = [100, 40, 30, 30, 30, 30, 30, 30, 30, 30, 54, 54, 54, 54, 54, 54, 54, 54, 54, 25, 3, 100, 100, 100, 3, 3]
-friends_count = collections.Counter(num_friends)
-
-print('friends', friends_count)
-
-xs = range(101)
-ys = range(25)
-
-plt.bar(xs, ys)
-plt.axis([0, 101, 0, 25])
-plt.xlabel('# of friends')
-plt.ylabel('# of people')
-plt.show()
+for first in range(9):
+    for second in range(9):
+        print(f'{first + 1}단: ({(first + 1) * (second + 1)})')
+    

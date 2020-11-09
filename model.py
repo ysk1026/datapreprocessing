@@ -11,6 +11,11 @@ from tensorflow.keras.layers import Embedding, Dense, LSTM
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.models import load_model
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras import models
+from tensorflow.keras import layers
+from tensorflow.keras import optimizers
+from tensorflow.keras import losses
+from tensorflow.keras import metrics
 
 train_data = pd.read_table('ratings_train.txt')
 test_data = pd.read_table('ratings_test.txt')
@@ -80,13 +85,14 @@ def below_threshold_len(max_len, nested_list):
     print('전체 샘플 중 길이가 %s 이하인 샘플의 비율: %s'%(max_len, (cnt / len(nested_list))*100))
   
 max_len = 30
-below_threshold_len(max_len, X_train)
-X_train = pad_sequences(X_train, maxlen = max_len)
-X_test = pad_sequences(X_test, maxlen = max_len)
+# below_threshold_len(max_len, X_train)
+# X_train = pad_sequences(X_train, maxlen = max_len)
+# X_test = pad_sequences(X_test, maxlen = max_len)
 
 # model = Sequential()
 # model.add(Embedding(vocab_size, 100))
 # model.add(LSTM(128))
+# model.add(layers.Dense(64, activation='relu'))
 # model.add(Dense(1, activation='sigmoid'))
 
 # es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=4)

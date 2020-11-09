@@ -34,4 +34,4 @@ def sentiment_predict(new_sentence):
     else:
         print("{:.2f}% 확률로 부정 리뷰입니다.\n".format((1 - score) * 100))
     
-sentiment_predict('올해 최고의 영화 ㅋㅋ 추천합니다')
+sentiment_predict('좋아요 좋아요 나빠요 너는??')
